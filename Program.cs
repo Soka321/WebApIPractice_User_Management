@@ -60,6 +60,12 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.Map("/error", (HttpContext httpContext) =>
+{
+    return Results.Problem("An unexpected error occurred.");
+});
+
+
 app.MapControllers();
 
 app.Run();

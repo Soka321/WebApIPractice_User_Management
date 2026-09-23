@@ -22,7 +22,7 @@ namespace WebApIPractice.Controllers
 
         public UserController(IMemoryCache Cache,
          ApiContext context,
-         ILogger logger, IConfiguration configuration)
+         ILogger<UserController> logger, IConfiguration configuration)
         {
             _Cache = Cache;
             _context = context;
