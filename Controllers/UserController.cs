@@ -120,16 +120,24 @@ namespace WebApIPractice.Controllers
         {
             try
             {
-                if (user != null)
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var existingUser = _context.users.FirstOrDefault(u => u.Email == user.Email);
+                if (existingUser != null)
                 {
                     return Conflict("User already exists");
                 }
-                var response = _context.users.Add(user);
+                 _context.users.Add(user);
                 _context.SaveChanges();
-                return Ok(response);
+                _logger.LogInformation("User added");
+                return Ok(user);
+               
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "internal server error");
                 return NotFound(ex.Message);
 
             }

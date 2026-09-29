@@ -14,7 +14,7 @@ namespace WebApIPractice.Models
         [EmailAddress]
         public string Email { get; set; }
         [Required(ErrorMessage = "Please provide user password")]
-        [MinLength(10)]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Please provide user role")]
         public string Role { get; set; }
