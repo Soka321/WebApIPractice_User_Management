@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,7 +13,9 @@ using WebApIPractice.ViewModel;
 
 namespace WebApIPractice.Controllers
 {
-    public class UserController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class UserController : ControllerBase
     {
 
         private IMemoryCache _Cache;
@@ -30,17 +33,14 @@ namespace WebApIPractice.Controllers
             _configuration = configuration;
 
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
 
         [HttpPost("Login")]
         public async Task<ActionResult> Login(LoginVM log)
         {
             try
             {
-                if (log.Email != "Soka@gmail.com" && log.Password != "321")
+                if (log.Email != "Soka@gmail.com" && log.Password != "987654321")
                 {
                     return NotFound("User Not Found!!");
                 }
@@ -85,31 +85,26 @@ namespace WebApIPractice.Controllers
         }
         //private List<User> users;
         [HttpGet("Users")]
-        public ActionResult GetUsers()
+        public async Task<ActionResult> GetUsers()
         {
             try
             {
-
                 if (_Cache.TryGetValue("Users", out List<User>? users))
                 {
-
                     return Ok(users);
                 }
 
-                users = _context.users.ToList();
+                users = await _context.users.ToListAsync(); 
 
-                if (User == null)
+                if (users == null || users.Count == 0)
                 {
                     return NotFound("No users found");
                 }
                 _Cache.Set("Users", users);
                 return Ok(users);
-
-
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }

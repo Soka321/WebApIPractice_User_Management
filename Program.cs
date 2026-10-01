@@ -32,6 +32,15 @@ builder.Services
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy.WithOrigins("https://localhost:xxxx") // your MVC port
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+});
+
+//app.UseCors("AllowFrontend");
 
 // Add services to the container.
 
